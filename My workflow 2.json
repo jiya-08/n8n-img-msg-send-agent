@@ -1,0 +1,191 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ac9b272e-ad30-42b1-b3c0-cbbbfa2dffc6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f8508ad-9ceb-4185-a78c-97f7a3905b5f",
+              "name": "image_url",
+              "value": "https://drive.google.com/file/d/1S7QSP0KVNM3JO2DlwcTHICoG7texUd0J/view?usp=sharing",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d4fe562c-c023-43fe-88a2-7e03cf7dff89",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "from": "=whatsapp:+14155238886",
+        "to": "={{ $json.Phone }}",
+        "toWhatsapp": true,
+        "message": "Hello from my AI agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        848,
+        16
+      ],
+      "id": "48eec604-82a7-4208-b241-df89dd5423c4",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "IeDLA71hT9m3f4rD",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "6a192958-2b24-44dd-8517-2327b1c5056c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appSqB5MnBzPuULPx",
+          "mode": "list",
+          "cachedResultName": "Whatsapp",
+          "cachedResultUrl": "https://airtable.com/appSqB5MnBzPuULPx"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl4VvjGhfjTQhIwV",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appSqB5MnBzPuULPx/tbl4VvjGhfjTQhIwV"
+        },
+        "returnAll": false,
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "Name"
+            },
+            {
+              "field": "Phone"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "dee7ac23-4461-4121-84d2-12991929e8dc",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jZ1Fe6ZnG52oRjIf",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an SMS/MMS/WhatsApp message": {
+      "main": [
+        []
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "05670279-032e-4289-9b8d-894e1cce8151",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e505a9663e96172fd69673458aed97a7b26e983216d2f125647505aa69fe436"
+  },
+  "id": "ZjnDtxVU7nPOymFv",
+  "tags": []
+}
